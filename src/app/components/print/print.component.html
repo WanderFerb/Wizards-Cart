@@ -1,0 +1,67 @@
+<button id="printPageButton" (click)="generatePdf()">Print</button>
+
+
+<body>
+  <header class="clearfix">
+    
+    <h1>INVOICE</h1>
+    <div id="company" class="clearfix">
+      <div>SHIPPING ADDRESS</div>
+   
+      <div *ngersFor="let user of us">{{user.shippingaddress}}</div>
+      
+    </div>
+    <div id="project">
+     
+      <div *ngFor="let user of users"><span >NAME</span>{{user.name}}</div>
+      <div *ngFor="let user of users"><span>ADDRESS</span> {{user.address}}</div>
+      <div *ngFor="let user of users"><span>EMAIL</span> {{user.email}}</div>
+      <div *ngFor="let user of users"><span>DATE</span> {{user.date}}</div>
+      
+    </div>
+  </header>
+  <main>
+    <table>
+      <thead>
+        <tr>
+          <th class="service" >TYPE</th>
+          <th class="desc">PRODUCT</th>
+          <th class="service">PRICE</th>
+          <th class="qty">QTY</th>
+          <th class="total">TOTAL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="service"  *ngFor="let user of users">{{user.type}}</td>
+          <td class="desc" *ngFor="let user of users">{{user.product}}</td>
+          <td class="unit" *ngFor="let user of users">{{user.price}}</td>
+          <td class="qty" *ngFor="let user of users">{{user.qty}}</td>
+          <td class="total" *ngFor="let user of users">{{user.total}}</td>
+        </tr>
+        
+        <tr>
+          <td colspan="4">SUBTOTAL</td>
+          <td class="total" *ngFor="let user of users">{{user.subtotal}}</td>
+        </tr>
+        <tr>
+          <td colspan="4" >TAX 0%</td>
+          <td class="total" *ngFor="let user of users">{{user.tax}}</td>
+        </tr>
+        <tr>
+          <td colspan="4" class="grand total">GRAND TOTAL</td>
+          <td class="grand total"  *ngFor="let user of users">{{user.grandtotal}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="notices">
+      <div>NOTICE:</div>
+      <div class="notice">A finance charge of 1.5% will be made on unpaid balances after 30 days.</div>
+    </div>
+  </main>
+  <footer>
+    
+    Invoice was created on a computer and is valid without the signature and seal.
+    
+  </footer>
+</body>
