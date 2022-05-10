@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupName } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Order } from 'src/app/common/order';
 import { OrderItem } from 'src/app/common/order-item';
@@ -8,12 +8,15 @@ import { CartService } from 'src/app/services/cart.service';
 import { CheckoutService } from 'src/app/services/checkout.service';
 import { WizardsFormService } from 'src/app/services/wizards-form.service';
 import { UsersDataService } from 'src/app/services/users-data.service';
+import { Country } from 'src/app/common/country';
+import { State } from 'src/app/common/state';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css']
 })
+
 export class CheckoutComponent implements OnInit {
 
   checkoutFormGroup: FormGroup;
@@ -23,11 +26,14 @@ export class CheckoutComponent implements OnInit {
 
   cardYears: number[] = [];
   cardMonths: number[] = [];
-  users:any;
-  // countries: Country[] = [];
 
-  // shippingAddressStates: State[] = [];
-  // billingAddressStates: State[] = [];
+  //for print
+  //users:any;
+
+  countries: Country[] = [];
+
+  shippingAddressStates: State[] = [];
+  billingAddressStates: State[] = [];
   
   constructor(private formBuilder: FormBuilder,
     private wizardsFormService: WizardsFormService,
@@ -35,16 +41,12 @@ export class CheckoutComponent implements OnInit {
     private checkoutService: CheckoutService,
     private router: Router,
     private userData:UsersDataService) {
-      userData.users().subscribe((data)=>{
-      console.warn("data",data);
-      this.users=data; }   
-      )
     }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void { 
 
-    this.reviewCartDetails();
+    //this.reviewCartDetails();
 
     this.checkoutFormGroup = this.formBuilder.group({
       costumer: this.formBuilder.group({
@@ -85,18 +87,26 @@ export class CheckoutComponent implements OnInit {
         console.log("Retrieved card months: " + JSON.stringify(data));
         this.cardMonths = data;
       }
-    )
+    );
 
     //populating card years
     // const startYear : number = new Date().getFullYear() + 1;
     // console.log("startMonth: " +startMonth)
-
     this.wizardsFormService.getCardYears().subscribe(
       data => {
         console.log("Retrieved card years: " + JSON.stringify(data));
         this.cardYears = data;
       }
     )
+
+    //populate countries
+    this.wizardsFormService.getCountries().subscribe(
+      data => {
+        console.log("Retrieved countries: " + JSON.stringify(data));
+        this.countries = data;
+      }
+    );
+
   }
 
   reviewCartDetails() {
@@ -116,16 +126,14 @@ export class CheckoutComponent implements OnInit {
     if (event.target.checked) {
       this.checkoutFormGroup.controls['billingAddress']
             .setValue(this.checkoutFormGroup.controls['shippingAddress'].value);
- 
-    //  
-     // this.billingAddressStates = this.shippingAddressStates;
+  
+    this.billingAddressStates = this.shippingAddressStates;
  
     }
     else {
       this.checkoutFormGroup.controls['billingAddress'].reset();
  
-      // bug fix for states
-      //this.billingAddressStates = [];
+      this.billingAddressStates = [];
     }
     
   }
@@ -155,6 +163,10 @@ export class CheckoutComponent implements OnInit {
 
   onSubmit(){
     console.log("handling event submission");
+    console.log(this.checkoutFormGroup.get('costumer').value);
+    console.log("The email address is: " + this.checkoutFormGroup.get('costumer').value.email); 
+    console.log("The shipping address country is: " + this.checkoutFormGroup.get('shiipingAddress').value.country.name); 
+    console.log("The shipping address state is: " + this.checkoutFormGroup.get('shiipingAddress').value.state.name); 
 
     //set up order
     let order = new Order();
@@ -206,8 +218,6 @@ export class CheckoutComponent implements OnInit {
     }
     );
 
-    console.log(this.checkoutFormGroup.get('costumer').value);
-    console.log("The email address is: " + this.checkoutFormGroup.get('costumer').value.email); 
   }
 
   generatePdf(){
@@ -226,6 +236,31 @@ export class CheckoutComponent implements OnInit {
 
     //navigate to main products page
     this.router.navigateByUrl("/products");
+  }
+
+  getStates(formGroupName : string){
+    const formGroup = this.checkoutFormGroup.get(formGroupName);
+
+    const countryCode = formGroup.value.country.code;
+    const countryName = formGroup.value.country.name;
+
+    console.log(`${formGroupName} country code: ${countryCode}`);
+    console.log(`${formGroupName} country name: ${countryName}`);
+
+    this.wizardsFormService.getStates(countryCode).subscribe(
+      data => {
+        if(formGroupName === 'shippinAddress'){
+          this.shippingAddressStates = data;
+        }
+        else{
+          this.billingAddressStates = data;
+        }
+
+        //select first itekm by default
+        formGroup.get('state'). setValue(data[0]);
+
+      }
+    );
   }
 
 }

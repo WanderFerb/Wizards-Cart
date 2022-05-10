@@ -11,9 +11,18 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-list.component.css'],
 })
 export class ProductListComponent implements OnInit {
-  products!: Product[];
+  
+  products: Product[] = [];
   currentCategoryId!: number;
+  previousCategoryId: number = 1;
   searchMode!: boolean;
+
+  //properties for paginatrion
+  thePageNumber : number = 1;
+  thePageSize : number = 10;
+  theTotalElements : number = 0;
+
+  previousKeyword : string = null;
 
   constructor(
     private productService: ProductService,
@@ -39,13 +48,21 @@ export class ProductListComponent implements OnInit {
 
   handleSearchProducts() {
    const theKeyword : string = this.route.snapshot.paramMap.get('keyword')!;
-  
+  //if given keyword is diffrent from previous
+  //set page number to 1
+
+  if(this.previousKeyword != theKeyword){
+    this.thePageNumber = 1;
+  }
+
+  this.previousKeyword = theKeyword
+
+  console.log(`keyword=${theKeyword}, thePagenumber=${this.thePageNumber}`);
+
    //searching for the products using trhe keyword entered inside the search box
-   this.productService.searchProducts(theKeyword).subscribe(
-     data => {
-       this.products = data;
-     }
-   )
+   this.productService.searchProductsPaginate(this.thePageNumber-1,
+                                              this.thePageSize,
+                                              theKeyword).subscribe(this.processResult());
   }
 
   handleListProducts() {
@@ -59,11 +76,39 @@ export class ProductListComponent implements OnInit {
       this.currentCategoryId = 1;
     }
 
+    //checking for diffrent categories
+
+
+    //rese5ting page number if difft product category comes
+    if(this.previousCategoryId != this.currentCategoryId){
+      this.thePageNumber = 1;
+    }
+
+    this.previousCategoryId = this.currentCategoryId;
+
+    console.log(`currentCategoryId=${this.currentCategoryId}, thePageNumber=${this.thePageNumber}`);
+    
+    //geeting products for given category id
     this.productService
-      .getProductList(this.currentCategoryId)
-      .subscribe((data) => {
-        this.products = data;
-      });
+      .getProductListPaginate(this.thePageNumber -1, 
+                              this.thePageSize,
+                              this.currentCategoryId)
+      .subscribe(this.processResult());
+  }
+
+  processResult() {
+    return data => {
+      this.products = data._embedded.products;
+      this.thePageNumber = data.page.number + 1;
+      this.thePageSize = data.page.size;
+      this.theTotalElements = data.page.totalElements;
+    };
+  }
+
+  updatePageSize(pageSize : number){
+    this.thePageSize = pageSize;
+     this.thePageNumber = 1;
+     this.listProducts();
   }
 
   addToCart(theProduct: Product){
