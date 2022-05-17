@@ -23,9 +23,9 @@ export class WizardsFormService {
 
   getStates(theCountryCode: string): Observable<State[]>{
     //search url
-    const searchStatestUrl =  `${this.statesUrl}/search/findByCountryCode?code=${theCountryCode}`;
+    const searchUrl =  `${this.statesUrl}/search/findByCountryCode?code=${theCountryCode}`;
 
-    return this.httpClient.get<GetResponseStates>(searchStatestUrl).pipe(
+    return this.httpClient.get<GetResponseStates>(this.statesUrl).pipe(
       map(response => response._embedded.states)
     );
   }
