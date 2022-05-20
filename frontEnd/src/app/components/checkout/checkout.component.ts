@@ -231,7 +231,7 @@ export class CheckoutComponent implements OnInit {
     return this.checkoutFormGroup.get('cardDetails.cardNumber');
   }
   get cardSecurityCode() {
-    return this.checkoutFormGroup.get('cardDetails.securityCode');
+    return this.checkoutFormGroup.get('cardDetails.cardSecurityCode');
   }
 
   copyShippingToBilling(event) {

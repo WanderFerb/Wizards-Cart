@@ -491,16 +491,16 @@
             <div class="col-md-2"><label>Security Code</label></div>
             <div class="col-md-9">
               <div class="input-space">
-                <input formControlName="securityCode" type="text" />
+                <input formControlName="cardSecurityCode" type="text" />
 
-                <!-- <div
+                <div
                   *ngIf="cardSecurityCode.invalid && (cardSecurityCode.dirty || cardSecurityCode.touched)"
                   class="alert alert-danger mt-1"
                 >
                   <div *ngIf="cardSecurityCode.errors.required">Card Security Code is required</div>
 
                   <div *ngIf="cardSecurityCode.errors.pattern">Invalid Card Security Code</div> 
-                </div> -->
+                </div>
 
               </div>
             </div>

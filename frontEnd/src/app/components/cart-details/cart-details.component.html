@@ -1,7 +1,3 @@
-<!-- Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-
-
 <div class="main-content">
   <div class="section-content section-content-p30">
     <div class="container-fluid">
@@ -30,31 +26,61 @@
               <div class="items">
                 <label>Quantity:</label>
                 <div class="row no-gutters">
-                    <div class="col">
-                        <button (click)="decrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
-                          </svg>
-                        </button>
-                    </div>
-                    <div class="col ml-4 mr-2">
-                      {{ tempCartItem.quantity }}
-                    </div>
-                    <div class="col">
-                      <button (click)="incrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right-short" viewBox="0 0 16 16">
-                          <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-                        </svg>
-                      </button>
+                  <div class="col">
+                    <button
+                      (click)="decrementQuantity(tempCartItem)"
+                      class="btn btn-primary btn-sm"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-arrow-left-short"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                  <div class="col ml-4 mr-2">
+                    {{ tempCartItem.quantity }}
+                  </div>
+                  <div class="col">
+                    <button
+                      (click)="incrementQuantity(tempCartItem)"
+                      class="btn btn-primary btn-sm"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="currentColor"
+                        class="bi bi-arrow-right-short"
+                        viewBox="0 0 16 16"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+                        />
+                      </svg>
+                    </button>
                   </div>
                   <div class="col-8"></div>
-
                 </div>
               </div>
-              
-                <button (click)="remove(tempCartItem)" class="btn btn-primary btn-hover show-button">
+
+              <div>
+                <button
+                  (click)="remove(tempCartItem)"
+                  class="btn btn-primary btn-hover show-button"
+                >
                   Remove Item
                 </button>
+              </div>
 
               <p class="mt-2">
                 Subtotal:
@@ -70,17 +96,25 @@
             <td style="font-weight: bold">
               <p>Total Quantity: {{ totalQuantity }}</p>
               <p>Shipping: FREE</p>
-              <p>Total Price: {{ totalPrice | currency: "INR" }}</p>              
-              <button class="btn btn-secondary show-button">
-                <a routerLink="/checkout">Checkout!</a>
-              </button>
-                <!-- <form><button class="btn btn-secondary" (ngSubmit)="generatePdf()">Print!</button></form> -->
-              </td>
+              <p>Total Price: {{ totalPrice | currency: "INR" }}</p>
+              <div>
+                <button class="btn btn-secondary show-button">
+                  <a routerLink="/checkout">Checkout!</a>
+                </button>
+              </div>
+              <!-- <form><button class="btn btn-secondary" (ngSubmit)="generatePdf()">Print!</button></form> -->
+            </td>
           </tr>
         </table>
       </div>
       <!-- if cart is empty then display a msg -->
-      <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-2" role="alert">YOUR SHOPPING CART IS EMPTY!</div>
+      <div
+        *ngIf="cartItems.length == 0"
+        class="alert alert-warning col-md-2"
+        role="alert"
+      >
+        YOUR SHOPPING CART IS EMPTY!
+      </div>
     </div>
   </div>
 </div>
